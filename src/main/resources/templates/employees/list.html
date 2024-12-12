@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Employee List</title>
+    <style>
+        .alert-container {
+            height: 50px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .fade-out {
+            animation: fadeOut 3s forwards;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Employee List</h1>
+
+    <div th:if="${successMessage}" class="alert alert-success alert-container fade-out" role="alert">
+        <span th:text="${successMessage}"></span>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-danger alert-container fade-out" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+
+    <a href="/employees/new" class="btn btn-primary mb-3">Add Employee</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Salary</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee : ${employees}">
+            <td th:text="${employee.name}"></td>
+            <td th:text="${employee.department}"></td>
+            <td th:text="${employee.salary}"></td>
+            <td th:text="${employee.email}"></td>
+            <td>
+                <a th:href="@{/employees/edit/{id}(id=${employee.id})}" class="btn btn-warning">Edit</a>
+                <a th:href="@{/employees/delete/{id}(id=${employee.id})}" class="btn btn-danger"
+                   onclick="return confirm('Are you sure you want to delete this employee?');">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    window.onload = function() {
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.fade-out');
+            alerts.forEach(function(alert) {
+                alert.classList.add('fade-out');
+            });
+        }, 2000);
+    };
+</script>
+</body>
+</html>
